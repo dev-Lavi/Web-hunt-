@@ -3,29 +3,29 @@ import mongoose from 'mongoose';
 const teamSchema = new mongoose.Schema({
   teamName: {
     type: String,
-    required: true,      
-    unique: true,       
-    trim: true,          
+    required: true,
+    unique: true,
+    trim: true,
   },
   answers: [
     {
       questionId: {
         type: Number,
-        required: true,  
+        required: true,
       },
       givenAnswer: {
         type: String,
-        required: true,  
+        required: false, // <-- changed
       },
       isCorrect: {
         type: Boolean,
-        required: true,  
+        required: false, // <-- changed
       },
     },
   ],
   totalReward: {
     type: Number,
-    default: 0,         
+    default: 0,
   },
 });
 
