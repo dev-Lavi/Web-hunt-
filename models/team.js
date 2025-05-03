@@ -25,7 +25,7 @@ const teamSchema = new mongoose.Schema({
   ],
   totalReward: {
     type: Number,
-    default: 100,
+    default: 0,
   },
 });
 

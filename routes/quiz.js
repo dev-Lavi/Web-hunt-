@@ -43,7 +43,7 @@ router.post('/register-team', async (req, res) => {
 });
 
 
-router.post('/submit-answers', async (req, res) => {
+router.post('/submit-answers', async (req, res) => { 
   const { teamName, answers } = req.body;
 
   if (!teamName || !answers || !Array.isArray(answers) || answers.length === 0) {
@@ -68,7 +68,7 @@ router.post('/submit-answers', async (req, res) => {
       answerKeyMap[doc.questionId] = doc.correctAnswer;
     });
 
-    let totalReward = 0;
+    let rewardEarnedThisSubmission = 0;
     const evaluatedAnswers = [];
 
     for (let ans of answers) {
@@ -88,7 +88,7 @@ router.post('/submit-answers', async (req, res) => {
         correct &&
         normalize(givenAnswer) === normalize(correct);
 
-      if (isCorrect) totalReward += 15;
+      if (isCorrect) rewardEarnedThisSubmission += 15;
 
       evaluatedAnswers.push({
         questionId,
@@ -97,15 +97,15 @@ router.post('/submit-answers', async (req, res) => {
       });
     }
 
-
     team.answers = evaluatedAnswers;
-    team.totalReward = totalReward;
+    team.totalReward += rewardEarnedThisSubmission; 
     await team.save();
 
     res.json({
       teamName,
       totalCorrect: evaluatedAnswers.filter(ans => ans.isCorrect).length,
-      totalReward,
+      rewardEarnedThisSubmission,
+      totalReward: team.totalReward,
       message: 'Answers submitted and evaluated successfully!',
     });
 
