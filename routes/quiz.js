@@ -4,14 +4,11 @@ import Team from '../models/team.js';
 
 const router = express.Router();
 
-// Function to normalize answers (removes special characters, trims, and makes lowercase)
+
 const normalize = (str) =>
   str?.replace(/[^\w\s]/gi, '').trim().toLowerCase();
 
-/**
- * POST /api/quiz/register-team
- * Registers a team name before submission
- */
+
 router.post('/register-team', async (req, res) => {
   const { teamName } = req.body;
 
@@ -25,20 +22,27 @@ router.post('/register-team', async (req, res) => {
       return res.status(400).json({ message: 'Team already registered' });
     }
 
-    const newTeam = new Team({ teamName });
+    const newTeam = new Team({
+      teamName,
+      totalReward: 100,
+    });
+
     await newTeam.save();
 
-    res.status(201).json({ message: 'Team registered successfully' });
+    res.status(201).json({
+      message: 'Team registered successfully and awarded 100 points!',
+      team: {
+        teamName: newTeam.teamName,
+        totalReward: newTeam.totalReward,
+      },
+    });
   } catch (err) {
     console.error('Error registering team:', err);
     res.status(500).send('Server error');
   }
 });
 
-/**
- * POST /api/quiz/submit-answers
- * Accepts submitted answers and evaluates them
- */
+
 router.post('/submit-answers', async (req, res) => {
   const { teamName, answers } = req.body;
 
@@ -84,7 +88,7 @@ router.post('/submit-answers', async (req, res) => {
         correct &&
         normalize(givenAnswer) === normalize(correct);
 
-      if (isCorrect) totalReward += 10000;
+      if (isCorrect) totalReward += 15;
 
       evaluatedAnswers.push({
         questionId,
@@ -93,7 +97,7 @@ router.post('/submit-answers', async (req, res) => {
       });
     }
 
-    // Update team with answers and reward
+
     team.answers = evaluatedAnswers;
     team.totalReward = totalReward;
     await team.save();

@@ -15,11 +15,11 @@ const teamSchema = new mongoose.Schema({
       },
       givenAnswer: {
         type: String,
-        required: false, // <-- changed
+        required: false, 
       },
       isCorrect: {
         type: Boolean,
-        required: false, // <-- changed
+        required: false, 
       },
     },
   ],
