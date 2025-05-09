@@ -43,7 +43,7 @@ connectDB()
       console.log(`Server running on port ${PORT}`);
 
       // Keep-alive cron job (every 5 mins)
-      const SELF_URL = `https://${process.env.RENDER_EXTERNAL_URL || 'your-render-app.onrender.com'}/ping`;
+      const SELF_URL = `${process.env.RENDER_EXTERNAL_URL}/ping`;
 
       cron.schedule('*/5 * * * *', async () => {
         try {
