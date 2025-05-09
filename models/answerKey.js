@@ -8,7 +8,7 @@ const answerKeySchema = new mongoose.Schema({
   },
   correctAnswer: {
     type: String,
-    required: true,     
+    required: false,     
   }
 });
 
