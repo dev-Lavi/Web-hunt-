@@ -115,4 +115,20 @@ router.post('/submit-answers', async (req, res) => {
   }
 });
 
+
+router.get('/scoreboard', async (req, res) => {
+  try {
+    const teams = await Team.find({}, { teamName: 1, totalReward: 1, _id: 0 })
+      .sort({ totalReward: -1 });
+
+    res.json({
+      message: 'Scoreboard fetched successfully!',
+      scoreboard: teams,
+    });
+  } catch (err) {
+    console.error('Error fetching scoreboard:', err);
+    res.status(500).send('Server error');
+  }
+});
+
 export default router;
