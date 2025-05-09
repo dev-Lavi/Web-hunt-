@@ -74,7 +74,11 @@ router.post('/submit-answers', async (req, res) => {
     for (let ans of answers) {
       const { questionId, givenAnswer } = ans;
 
-if (typeof questionId !== 'number' || typeof givenAnswer !== 'string') {
+if (
+  typeof questionId !== 'number' ||
+  typeof givenAnswer !== 'string' ||
+  !givenAnswer.trim()
+) {
   return res.status(400).json({ message: 'Invalid answer format' });
 }
 
